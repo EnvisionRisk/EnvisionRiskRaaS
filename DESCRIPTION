@@ -1,0 +1,29 @@
+Package: EnvisionRiskRaaS
+Type: Package
+Title: An R Interface to the 'EnvisionRisk' Market Risk-as-a-Service API
+Version: 0.1.0
+Author: Jonas Hal <jonas.hal@envisionrisk.com>
+Maintainer: EnvisionRisk <support@envisionrisk.com>
+Description: Looking to make informed decisions in the sea of financial 
+    uncertainties? Meet EnvisionRisk's cloud service, your precision tool for 
+    quantifying market risks. No more guesswork; our platform equips you with 
+    standardized metrics to drive cost-efficiency and shield your capital.
+    EnvisionRisk's REST API is the secure, user-friendly solution for your 
+    everyday risk quantification. Translate data into action and unlock the 
+    value hidden within financial complexities.
+    With coverage for over 13,000 exchange-traded and over-the-counter 
+    instruments and counting, EnvisionRisk stands ready to evolve with your 
+    needs.
+    Switch to EnvisionRisk today. Turn your market insights into concrete 
+    foresights and stay ahead of the curve.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: data.table,
+  config,
+  jsonlite,
+  httr,
+  getPass
+RoxygenNote: 7.2.3
+Depends:
+    R (>= 4.1.0)
