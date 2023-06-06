@@ -78,11 +78,12 @@ get_api_url <- function(end_point){
 }
 
 get_access_token <- function(){
-  if(Sys.getenv("ACCESS_TOKEN") == ""){
-    envrsk_auth_renew_access_token()
-  }
+  auth_flow_response <- envrsk_auth_renew_access_token()
 
-  return(Sys.getenv("ACCESS_TOKEN"))
+  if(auth_flow_response[["status-code"]] == 200){
+    return(Sys.getenv("ACCESS_TOKEN"))
+  }
+  stop(auth_flow_response)
 }
 
 #' Function to make a POST request to an API
@@ -177,24 +178,26 @@ envrsk_get <- function(access_token,
 #'
 #' @return A list containing the status code, the access token and its expiry time.
 #'         In case of error, it returns the error message.
-#' @export
 #'
 #' @examples
 #' \dontrun{
 #' token <- envrsk_auth_get_access_token(usr_id = "your_user_id",
 #'                                       usr_pwd = "your_password")
 #' }
+#' @noRd
 envrsk_auth_get_access_token <- function(usr_id, usr_pwd){
   # Query parameters
   .query <- list("usr_id"  = usr_id,
                  "usr_pwd" = usr_pwd)
 
   if(is.null(usr_id) | is.na(usr_id) | usr_id == ""){
-    return(list(error="Missing required parameter: usr_id"))
+    return(list("status-code" = 400,
+                "message" = "Missing required parameter: usr_id"))
   }
 
   if(is.null(usr_pwd) | is.na(usr_pwd) | usr_pwd == ""){
-    return(list(error="Missing required parameter: usr_pwd"))
+    return(list("status-code" = 400,
+                "message" = "Missing required parameter: usr_pwd"))
   }
 
   access_token_expiry <- Sys.time() + 24*60*60
@@ -204,12 +207,13 @@ envrsk_auth_get_access_token <- function(usr_id, usr_pwd){
   )
 
   if(httr::status_code(get_access_token) != 200){
-    return(httr::content(get_access_token))
+    return(list("status-code" = httr::status_code(get_access_token),
+                "message"     = httr::content(get_access_token)))
   }
   access_token <- httr::content(get_access_token)
   return(list("status-code"         = 200,
               "access-token"        = access_token,
-              "access-token-expiry" = Sys.time() + (24*60*60 - 60)))
+              "access-token-expiry" = access_token_expiry))
 
 }
 
@@ -225,23 +229,30 @@ envrsk_auth_get_access_token <- function(usr_id, usr_pwd){
 #'                    of the access token. Default is FALSE.
 #'
 #' @return A message indicating the validity of the access token or any error message.
-#' @export
 #'
 #' @examples
 #' \dontrun{
 #' envrsk_auth_renew_access_token(force_renew = TRUE)
 #' }
+#' @noRd
 envrsk_auth_renew_access_token <- function(force_renew = FALSE){
   renew_flow <- function(){
     if(Sys.getenv("USR_ID") != "" & Sys.getenv("USR_PWD") != ""){
-      return_access_token <- envrsk_auth_get_access_token(
+      access_token <- envrsk_auth_get_access_token(
         Sys.getenv("USR_ID"),
         Sys.getenv("USR_PWD"))
-      Sys.setenv("ACCESS_TOKEN"        = return_access_token[["access-token"]],
-                 "ACCESS_TOKEN_EXPIRY" = as.character(as.POSIXct(
-                   return_access_token[["access-token-expiry"]],
-                   format = "%Y-%m-%d %h:%m:%s")),
-                 "ACCESS_TOKEN_STATUS" = return_access_token[["status-code"]])
+      if(access_token[["status-code"]] == 200){
+        Sys.setenv("ACCESS_TOKEN"        = access_token[["access-token"]],
+                   "ACCESS_TOKEN_EXPIRY" = as.character(as.POSIXct(
+                     access_token[["access-token-expiry"]],
+                     format = "%Y-%m-%d %h:%m:%s")))
+        return(list("status-code" = 200,
+                    "message" = "access-token has been aquired"))
+      } else {
+        Sys.setenv("USR_ID" = "")
+        Sys.setenv("USR_PWD" = "")
+        return(access_token)
+      }
     } else {
       envrsk_auth_set_access_token()
     }
@@ -252,18 +263,16 @@ envrsk_auth_renew_access_token <- function(force_renew = FALSE){
     Sys.setenv("USR_PWD" = "")
     renew_flow()
   } else {
-    if(Sys.getenv("ACCESS_TOKEN_EXPIRY") < Sys.time()){
+    cond <- try(Sys.getenv("ACCESS_TOKEN_EXPIRY") < Sys.time(), TRUE)
+    if(is.logical(cond) && cond){
       renew_flow()
+    } else {
+      return(list("status-code" = 200,
+                  "message" = paste0("access-token is valid until: ", Sys.getenv("ACCESS_TOKEN_EXPIRY"))))
     }
   }
-  if(Sys.getenv("ACCESS_TOKEN_STATUS") == 200){
-    message(paste0("The access-token is valid until: ",
-                   as.POSIXct(Sys.getenv("ACCESS_TOKEN_EXPIRY"))))
-  } else {
-    Sys.setenv("USR_ID" = "")
-    Sys.setenv("USR_PWD" = "")
-  }
 }
+
 
 #' Function to set access token for API authentication
 #'
@@ -279,6 +288,7 @@ envrsk_auth_renew_access_token <- function(force_renew = FALSE){
 #' \dontrun{
 #' envrsk_auth_set_access_token()
 #' }
+#' @noRd
 envrsk_auth_set_access_token <- function(){
   # Provide credentials - email and password. In case you have not yet received
   # your personal credentials, contact EnvisionRisk at info@envisionrisk.com
@@ -289,18 +299,20 @@ envrsk_auth_set_access_token <- function(){
 
   # AUTHENTICATIO WITH THE RISK SERVER
   # Retrieve the access-token from the Auth-server.
-  return_access_token <- envrsk_auth_get_access_token(
+  access_token <- envrsk_auth_get_access_token(
     Sys.getenv("USR_ID"),
     Sys.getenv("USR_PWD"))
-  Sys.setenv("ACCESS_TOKEN"        = return_access_token[["access-token"]],
-             "ACCESS_TOKEN_EXPIRY" = as.character(as.POSIXct(
-               return_access_token[["access-token-expiry"]],
-               format = "%Y-%m-%d %h:%m:%s")),
-             "ACCESS_TOKEN_STATUS" = return_access_token[["status-code"]])
-  if(Sys.getenv("ACCESS_TOKEN_STATUS") == 200){
-    message("access-token has been aquired")
+  if(access_token[["status-code"]] == 200){
+    Sys.setenv("ACCESS_TOKEN"        = access_token[["access-token"]],
+               "ACCESS_TOKEN_EXPIRY" = as.character(as.POSIXct(
+                  access_token[["access-token-expiry"]],
+                  format = "%Y-%m-%d %h:%m:%s")))
+    #message("access-token has been aquired")
+    return(list("status-code" = 200,
+                "message" = "access-token has been aquired"))
   } else {
-    stop(return_access_token)
+    return(list("status-code" = 400,
+                "message" = access_token))
   }
 }
 
@@ -319,8 +331,7 @@ envrsk_auth_log_out <- function(){
   Sys.setenv("USR_ID"  = "",
              "USR_PWD" = "",
              "ACCESS_TOKEN"        = "",
-             "ACCESS_TOKEN_EXPIRY" = "",
-             "ACCESS_TOKEN_STATUS" = "")
+             "ACCESS_TOKEN_EXPIRY" = "")
 }
 
 #******************************************************************************
