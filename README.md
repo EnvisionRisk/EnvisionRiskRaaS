@@ -53,8 +53,8 @@ Although the following example may appear simple, it’s designed to
 illustrate how our service functions by requesting the simulated
 profit/loss (P/L) distribution for a single instrument — Apple (AAPL.US)
 as of 2023-06-06. Remember, this is just a starting point; our service
-also allows you to request simulated P/L distribution for your personal
-portfolio. Through this, you gain invaluable insights into potential
+also allows you to request simulated P/L distribution for your custom
+portfolios. Through this, you gain invaluable insights into potential
 future outcomes, enabling you to make informed investment decisions.
 
 The Profit and Loss (P/L) distribution is a crucial component in the

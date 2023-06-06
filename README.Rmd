@@ -41,7 +41,7 @@ devtools::install_github("EnvisionRisk/EnvisionRiskRaaS")
 To use the service you need to be a registered user. If you don't already have credentials, 
 you can sign up for a free trial account [here](https://envisionrisk.shinyapps.io/user_management). 
 
-Although the following example may appear simple, it's designed to illustrate how our service functions by requesting the simulated profit/loss (P/L) distribution for a single instrument — Apple (AAPL.US) as of `r as.Date(Sys.Date(), format = "%Y-%h-%d")`. Remember, this is just a starting point; our service also allows you to request simulated P/L distribution for your personal portfolio. Through this, you gain invaluable insights into potential future outcomes, enabling you to make informed investment decisions.  
+Although the following example may appear simple, it's designed to illustrate how our service functions by requesting the simulated profit/loss (P/L) distribution for a single instrument — Apple (AAPL.US) as of `r as.Date(Sys.Date(), format = "%Y-%h-%d")`. Remember, this is just a starting point; our service also allows you to request simulated P/L distribution for your custom portfolios. Through this, you gain invaluable insights into potential future outcomes, enabling you to make informed investment decisions.  
 
 The Profit and Loss (P/L) distribution is a crucial component in the world of market risk management as it provides a quantitative way of understanding potential financial outcomes. Here's why it plays an essential role:
 
