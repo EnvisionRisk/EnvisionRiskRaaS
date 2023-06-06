@@ -100,15 +100,14 @@ library(EnvisionRiskRaaS)
 use_date   <- Sys.Date()
 use_symbol <- "AAPL.US"
 
-# The '_raw' shows that the simulated price changes are denominated in 
-# the same currency as the stock. Use EnvisionRiskRaaS::envrsk_instrument_delta_vector_raw
-# in case 
+# The '_raw' part of the function-name indicates that the simulated price changes 
+# are denominated in the same currency as the stock it self. 
 api_response <- EnvisionRiskRaaS::envrsk_instrument_delta_vector_raw(
   date   = use_date, 
   symbol = use_symbol)
 
 # Use EnvisionRiskRaaS::envrsk_instrument_delta_vector with base_cur = "DKK" to 
-# include the (USD) currency risk as well as currency conversion into DKK.
+# include the (USD/DKK) currency risk.
 # api_response <- EnvisionRiskRaaS::envrsk_instrument_delta_vector(
 #   date     = use_date, 
 #   symbol   = use_symbol,
