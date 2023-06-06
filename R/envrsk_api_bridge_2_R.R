@@ -99,7 +99,7 @@ get_access_token <- function(){
 #' @param params A list containing the query parameters for the POST request.
 #'
 #' @return A list containing the status code and the content of the API response.
-#' @noRd
+#' @keywords internal
 envrsk_post <- function(access_token,
                         url,
                         body,
@@ -139,7 +139,7 @@ envrsk_post <- function(access_token,
 #' @param params A list containing the query parameters for the GET request.
 #'
 #' @return A list containing the status code and the content of the API response.
-#' @noRd
+#' @keywords internal
 envrsk_get <- function(access_token,
                        url,
                        params){
@@ -184,7 +184,7 @@ envrsk_get <- function(access_token,
 #' token <- envrsk_auth_get_access_token(usr_id = "your_user_id",
 #'                                       usr_pwd = "your_password")
 #' }
-#' @noRd
+#' @keywords internal
 envrsk_auth_get_access_token <- function(usr_id, usr_pwd){
   # Query parameters
   .query <- list("usr_id"  = usr_id,
@@ -234,7 +234,7 @@ envrsk_auth_get_access_token <- function(usr_id, usr_pwd){
 #' \dontrun{
 #' envrsk_auth_renew_access_token(force_renew = TRUE)
 #' }
-#' @noRd
+#' @keywords internal
 envrsk_auth_renew_access_token <- function(force_renew = FALSE){
   renew_flow <- function(){
     if(Sys.getenv("USR_ID") != "" & Sys.getenv("USR_PWD") != ""){
@@ -288,7 +288,7 @@ envrsk_auth_renew_access_token <- function(force_renew = FALSE){
 #' \dontrun{
 #' envrsk_auth_set_access_token()
 #' }
-#' @noRd
+#' @keywords internal
 envrsk_auth_set_access_token <- function(){
   # Provide credentials - email and password. In case you have not yet received
   # your personal credentials, contact EnvisionRisk at info@envisionrisk.com
@@ -848,6 +848,7 @@ envrsk_portfolio_portfolio_hyp_rskadj_perf_regular <- function(date,
 #' \dontrun{
 #' processed_output <- process_portfolio_return_values(res_out = api_response, simplify = TRUE)
 #' }
+#' @noRd
 process_portfolio_return_values <- function(res_out, simplify){
   if(res_out[["status_code"]] == 200){
     out <- res_out[["content"]]
