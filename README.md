@@ -34,6 +34,15 @@ solid foresights, and consistently maintain a competitive edge in the
 ever-fluctuating financial market. Stay not just in the game, but ahead
 of it.
 
+## Authentication
+
+EnvisionRisk employs robust authentication and authorization processes
+to safeguard systems and information. EnvisionRisk’s Market
+Risk-as-a-Service API operates on a token-based authentication system.
+To use the service you need to be a registered user. If you don’t
+already have credentials, you can sign up for a free trial account
+[here](https://envisionrisk.shinyapps.io/user_management).
+
 ## Installation
 
 You can install the development version of EnvisionRiskRaaS like so:
@@ -45,14 +54,10 @@ devtools::install_github("EnvisionRisk/EnvisionRiskRaaS")
 
 ## Example
 
-To use the service you need to be a registered user. If you don’t
-already have credentials, you can sign up for a free trial account
-[here](https://envisionrisk.shinyapps.io/user_management).
-
 Although the following example may appear simple, it’s designed to
 illustrate how our service functions by requesting the simulated
 profit/loss (P/L) distribution for a single instrument — Apple (AAPL.US)
-as of 2023-06-06. Remember, this is just a starting point; our service
+as of 2023-06-07. Remember, this is just a starting point; our service
 also allows you to request simulated P/L distribution for your custom
 portfolios. Through this, you gain invaluable insights into potential
 future outcomes, enabling you to make informed investment decisions.
