@@ -121,6 +121,16 @@ api_response <- EnvisionRiskRaaS::envrsk_instrument_delta_vector_raw(
   date   = use_date, 
   symbol = use_symbol)
 
+# Use our advanced API to request an Expected-Shortfall calculation, set at a 
+# 97.5% confidence level over a 1-day horizon, employing a point-in-time 
+# volatility scenario.
+api_response_es <- EnvisionRiskRaaS::envrsk_instrument_expected_shortfall_raw(
+  date   = use_date, 
+  symbol = use_symbol,
+  signif_level = 0.975,
+  volatility_id = "point_in_time")
+expected_shortfall_estimate <- api_response_es[["Output"]]$expected_shortfall
+
 # Leverage the EnvisionRiskRaaS::envrsk_instrument_delta_vector function with 
 # base_cur set to "DKK" to incorporate the risk associated with  USD/DKK 
 # currency exchange fluctuations. This allows you to evaluate and strategize 
@@ -134,8 +144,14 @@ api_response <- EnvisionRiskRaaS::envrsk_instrument_delta_vector_raw(
 
 # Plot the P/L distribution (code hidden)
 
+# Check out the comprehensive guide below for step-by-step instructions on how to 
+# generate Profit/Loss (P/L) distribution for your bespoke portfolio. This 
+# detailed resource is designed to assist you in understanding the financial 
+# impact of potential market changes on your portfolio.
+#?EnvisionRiskRaaS::envrsk_portfolio_delta_vector
+
 # Logout from the risk server
-EnvisionRiskRaaS::envrsk_auth_log_out()
+#EnvisionRiskRaaS::envrsk_auth_log_out()
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
