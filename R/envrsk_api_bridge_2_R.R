@@ -790,24 +790,24 @@ envrsk_portfolio_economic_capital_component <- function(date,
 #'                                    "single_stock", "cash", "etf"),
 #'                                    "quantity"      = c(129, 768, 69000, 89)))
 #'
-#' result <- envrsk_portfolio_portfolio_hyp_rskadj_perf_regular(date         = "2023-05-20",
-#'                                                              positions    = dt_positions,
-#'                                                              base_cur     = "USD",
-#'                                                              horizon      = 1,
-#'                                                              signif_level = 0.95,
-#'                                                              expected_roe = 0.1,
-#'                                                              report_depth = 3,
-#'                                                              simplify = TRUE)
+#' result <- envrsk_portfolio_hyp_rskadj_perf_regular(date         = "2023-05-20",
+#'                                                    positions    = dt_positions,
+#'                                                    base_cur     = "USD",
+#'                                                    horizon      = 1,
+#'                                                    signif_level = 0.95,
+#'                                                    expected_roe = 0.1,
+#'                                                    report_depth = 3,
+#'                                                    simplify = TRUE)
 #' }
-envrsk_portfolio_portfolio_hyp_rskadj_perf_regular <- function(date,
-                                                               positions,
-                                                               base_cur      = NULL,
-                                                               horizon       = NULL,
-                                                               signif_level  = NULL,
-                                                               volatility_id = NULL,
-                                                               expected_roe  = NULL,
-                                                               report_depth  = NULL,
-                                                               simplify      = FALSE){
+envrsk_portfolio_hyp_rskadj_perf_regular <- function(date,
+                                                     positions,
+                                                     base_cur      = NULL,
+                                                     horizon       = NULL,
+                                                     signif_level  = NULL,
+                                                     volatility_id = NULL,
+                                                     expected_roe  = NULL,
+                                                     report_depth  = NULL,
+                                                     simplify      = FALSE){
   end_point <- "portfolio-hyp-rskadj-perf-regular"
   api_url <- get_api_url(end_point)
 
@@ -871,24 +871,24 @@ envrsk_portfolio_portfolio_hyp_rskadj_perf_regular <- function(date,
 #'                                    "single_stock", "cash", "etf"),
 #'                                    "quantity"      = c(129, 768, 69000, 89)))
 #'
-#' result <- envrsk_portfolio_portfolio_hyp_rskadj_perf_component(date         = "2023-05-20",
-#'                                                                positions    = dt_positions,
-#'                                                                base_cur     = "USD",
-#'                                                                horizon      = 1,
-#'                                                                signif_level = 0.95,
-#'                                                                expected_roe = 0.1,
-#'                                                                report_depth = 3,
-#'                                                                simplify = TRUE)
+#' result <- envrsk_portfolio_hyp_rskadj_perf_component(date         = "2023-05-20",
+#'                                                      positions    = dt_positions,
+#'                                                      base_cur     = "USD",
+#'                                                      horizon      = 1,
+#'                                                      signif_level = 0.95,
+#'                                                      expected_roe = 0.1,
+#'                                                      report_depth = 3,
+#'                                                      simplify = TRUE)
 #' }
-envrsk_portfolio_portfolio_hyp_rskadj_perf_component <- function(date,
-                                                                 positions,
-                                                                 base_cur      = NULL,
-                                                                 horizon       = NULL,
-                                                                 signif_level  = NULL,
-                                                                 volatility_id = NULL,
-                                                                 expected_roe  = NULL,
-                                                                 report_depth  = NULL,
-                                                                 simplify      = FALSE){
+envrsk_portfolio_hyp_rskadj_perf_component <- function(date,
+                                                       positions,
+                                                       base_cur      = NULL,
+                                                       horizon       = NULL,
+                                                       signif_level  = NULL,
+                                                       volatility_id = NULL,
+                                                       expected_roe  = NULL,
+                                                       report_depth  = NULL,
+                                                       simplify      = FALSE){
   end_point <- "portfolio-hyp-rskadj-perf-component"
   api_url <- get_api_url(end_point)
 
