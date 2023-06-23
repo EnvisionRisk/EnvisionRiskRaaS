@@ -22,7 +22,7 @@ Delve into the world of EnvisionRisk's R package, your portal to our sophisticat
 
 Are you navigating the volatile waters of financial uncertainties, seeking to make strategic decisions? Allow EnvisionRisk's Cloud Service to be your compass, providing a precise mechanism for quantifying market risks. Replace guesswork with certainty; our platform furnishes you with standardized metrics designed to enhance cost-efficiency and fortify your financial bulwark.
 
-Our REST API, a seamless blend of security and user-friendliness, stands as your reliable tool for everyday risk quantification. Transform data into actionable steps and unravel the potential concealed within the labyrinth of financial complexities.
+Our REST API, a seamless blend of security and user-friendliness, stands as your reliable tool for everyday risk quantification. Transform data into actionable steps and unravel the potential concealed within the labyrinth of financial complexities. 
 
 With an expansive coverage spanning more than 13,000 exchange-traded and over-the-counter instruments—and continuously growing—EnvisionRisk is primed to adapt to your ever-evolving needs.
 

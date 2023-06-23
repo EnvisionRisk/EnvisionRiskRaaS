@@ -120,8 +120,6 @@ use_symbol <- "AAPL.US"
 api_response <- EnvisionRiskRaaS::envrsk_instrument_delta_vector_raw(
   date   = use_date, 
   symbol = use_symbol)
-#> Please enter password in TK window (Alt+Tab)
-#> Please enter password in TK window (Alt+Tab)
 
 # Leverage our sophisticated API to conduct an Expected-Shortfall computation, 
 # specified at a 97.5% confidence level across a single-day span, utilizing a 
