@@ -830,6 +830,87 @@ envrsk_portfolio_portfolio_hyp_rskadj_perf_regular <- function(date,
   return(out)
 }
 
+#' Compute Portfolio Hypothetical Risk Adjusted Performance (Component)
+#'
+#' This function communicates with a given API endpoint to compute and return the
+#' hypothetical risk adjusted performance of a given portfolio,
+#' considering positions provided.
+#'
+#' @param date         A string in the format 'yyyy-mm-dd', required for the API
+#' call. The date of the portfolio.
+#' @param positions    A data frame or matrix. Each row represents a position
+#' in the portfolio with necessary details.
+#' @param base_cur     A string representing the base currency for the portfolio.
+#' Default is NULL.
+#' @param horizon      Numeric. The time horizon in days for which the value at
+#' risk is calculated. Default is NULL.
+#' @param signif_level Numeric. The significance level for the value at risk
+#' calculation. Default is NULL.
+#' @param volatility_id An optional identifier for a specific volatility model
+#' to use in the calculation. Default is NULL.
+#' @param expected_roe Expected return on equity, as a decimal. Default is NULL.
+#' @param report_depth The depth to which the report should calculate risk. Default
+#' is NULL.
+#' @param simplify     Logical indicating whether the result should be simplified,
+#' if possible. Default is FALSE.
+#'
+#' @return If simplify = FALSE, a list with the following components is returned:
+#'         - "Input": A list containing the input parameters used in the API call.
+#'         - "tech_opr": The timestamp of when the API call was made.
+#'         - "Output": A data.table with the calculated risk performance.
+#'         - "symbols_mapped": A data.table with the symbol mapping.
+#'         - "symbols_unmapped": A data.table with the symbols that could not be mapped.
+#'         If simplify = TRUE, only the "Output" data.table is returned.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' dt_positions <- as.data.frame(list("symbol"        = c("AAPL.US", "DANSKE.CO",
+#' "CashUSD", "AGG.US"),
+#'                                    "position_type" = c("single_stock",
+#'                                    "single_stock", "cash", "etf"),
+#'                                    "quantity"      = c(129, 768, 69000, 89)))
+#'
+#' result <- envrsk_portfolio_portfolio_hyp_rskadj_perf_component(date         = "2023-05-20",
+#'                                                                positions    = dt_positions,
+#'                                                                base_cur     = "USD",
+#'                                                                horizon      = 1,
+#'                                                                signif_level = 0.95,
+#'                                                                expected_roe = 0.1,
+#'                                                                report_depth = 3,
+#'                                                                simplify = TRUE)
+#' }
+envrsk_portfolio_portfolio_hyp_rskadj_perf_component <- function(date,
+                                                                 positions,
+                                                                 base_cur      = NULL,
+                                                                 horizon       = NULL,
+                                                                 signif_level  = NULL,
+                                                                 volatility_id = NULL,
+                                                                 expected_roe  = NULL,
+                                                                 report_depth  = NULL,
+                                                                 simplify      = FALSE){
+  end_point <- "portfolio-hyp-rskadj-perf-component"
+  api_url <- get_api_url(end_point)
+
+  # Query parameters
+  .params <- list("date"          = date,
+                  "base_cur"      = base_cur,
+                  "horizon"       = horizon,
+                  "signif_level"  = signif_level,
+                  "volatility_id" = volatility_id,
+                  "expected_roe"  = expected_roe,
+                  "report_depth"  = report_depth)
+  .params <- .params[lengths(.params) != 0]
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = get_access_token(),
+                         params       = .params,
+                         body         = positions)
+
+  out <- process_portfolio_return_values(res_out, simplify)
+  return(out)
+}
+
 #' Process API Response
 #'
 #' This function processes the response from the portfolio risk API.

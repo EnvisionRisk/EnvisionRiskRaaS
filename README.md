@@ -57,7 +57,7 @@ devtools::install_github("EnvisionRisk/EnvisionRiskRaaS")
 Although the following example may appear simple, it’s designed to
 illustrate how our service functions by requesting the simulated
 profit/loss (P/L) distribution for a single instrument — Apple (AAPL.US)
-as of 2023-06-07. Remember, this is just a starting point; our service
+as of 2023-06-23. Remember, this is just a starting point; our service
 also allows you to request simulated P/L distribution for your custom
 portfolios. Through this, you gain invaluable insights into potential
 future outcomes, enabling you to make informed investment decisions.
@@ -120,10 +120,12 @@ use_symbol <- "AAPL.US"
 api_response <- EnvisionRiskRaaS::envrsk_instrument_delta_vector_raw(
   date   = use_date, 
   symbol = use_symbol)
+#> Please enter password in TK window (Alt+Tab)
+#> Please enter password in TK window (Alt+Tab)
 
-# Use our advanced API to request an Expected-Shortfall calculation, set at a 
-# 97.5% confidence level over a 1-day horizon, employing a point-in-time 
-# volatility scenario.
+# Leverage our sophisticated API to conduct an Expected-Shortfall computation, 
+# specified at a 97.5% confidence level across a single-day span, utilizing a 
+# point-in-time volatility scenario.
 api_response_es <- EnvisionRiskRaaS::envrsk_instrument_expected_shortfall_raw(
   date   = use_date, 
   symbol = use_symbol,
