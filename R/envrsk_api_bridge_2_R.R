@@ -1785,7 +1785,7 @@ envrsk_get_manifest <- function(){
 #' }
 envrsk_update_manifest <- function(manifest){
   end_point <- "put-manifest"
-  api_url <- get_api_url(end_point)
+  api_url   <- get_api_url(end_point)
 
   # Query parameters
   .params <- list()
