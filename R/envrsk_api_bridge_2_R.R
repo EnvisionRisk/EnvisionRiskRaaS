@@ -1748,11 +1748,65 @@ envrsk_get_manifest <- function(){
   return(out_raw)
 }
 
+#' Update a Manifest
+#'
+#' This function makes an HTTP POST request to the 'put-manifest' API endpoint
+#' to update the specified manifest.
+#'
+#' @param manifest A list, data frame or other structure that holds the manifest
+#'    to be updated. This must match the format expected by the API.
+#'
+#' @return NULL If the API request is successful (i.e., HTTP status code 200),
+#'    this function prints a success message and returns NULL. If the API request
+#'    is not successful, this function returns the full response from the API.
+#'
+#' @examples
+#' \dontrun{
+#'   # Update a manifest with data
+#'   manifest <- list(id = "abc123", status = "complete")
+#'   envrsk_update_manifest(manifest)
+#' }
+#'
+#' @seealso
+#' \itemize{
+#'   \item \link{envrsk_post}: Makes an HTTP POST request.
+#'   \item \link{get_api_url}: Get the API endpoint URL.
+#'   \item \link{get_access_token}: Get the access token for the API.
+#' }
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' my_manifest              <- envrsk_get_manifest()
+#' my_manifest$BASE_CUR     <- "DKK"
+#' my_manifest$SIGNIF_LEVEL <- 0.975
+#'
+#' envrsk_update_manifest(my_manifest)
+#' }
+envrsk_update_manifest <- function(manifest){
+  end_point <- "put-manifest"
+  api_url <- get_api_url(end_point)
+
+  # Query parameters
+  .params <- list()
+  .params <- .params[lengths(.params) != 0]
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = get_access_token(),
+                         params       = .params,
+                         body         = list(manifest))
+
+  if(res_out[["status_code"]] == 200){
+    message("OK - Manifest updated")
+  } else {
+    return(res_out)
+  }
+}
+
 #******************************************************************************
 #### Miscellaneous ####
 #******************************************************************************
-# common-decorate-position-id #
-#' Decorate Portfolio ID
+#' Decorate Portfolio with Product Type
 #'
 #' This function calls the 'decorate-table-id' endpoint of the EnvisionRisk API
 #' to enrich portfolio position data with additional information based on position ID.
@@ -1769,14 +1823,12 @@ envrsk_get_manifest <- function(){
 #'
 #' @examples
 #' \dontrun{
-#' dt_positions <- as.data.frame(list("symbol"        = c("AAPL.US", "DANSKE.CO",
-#' "CashUSD", "AGG.US"),
-#'                                    "position_type" = c("single_stock",
-#'                                    "single_stock", "cash", "etf"),
-#'                                    "quantity"      = c(129, 768, 69000, 89)))
-#' decorated_positions <- envrsk_decorate_portfolio_id(positions = dt_positions)
+#' dt_positions_without_product_type <- as.data.frame(list("symbol"   = c("AAPL.US", "DANSKE.CO",
+#'                                                                        "CashUSD", "AGG.US"),
+#'                                    "quantity" = c(129, 768, 69000, 89)))
+#' dt_positions <- envrsk_decorate_with_product_type(positions = dt_positions_without_product_type)
 #' }
-envrsk_decorate_position_id <- function(positions, simplify = TRUE){
+envrsk_decorate_portfolio_with_product_type <- function(positions, simplify = TRUE){
   end_point <- "decorate-position-id"
   api_url <- get_api_url(end_point)
 
@@ -1803,3 +1855,58 @@ envrsk_decorate_position_id <- function(positions, simplify = TRUE){
   return(out)
 }
 
+#' Decorates the portfolio with IDs using envrsk API
+#'
+#' This function uses the envrsk API to decorate a given portfolio with the
+#' respective ID. The decoration process typically includes the addition of
+#' meta-data, additional risk factors or calculations based on the portfolio
+#' positions.
+#'
+#' @param access_token Character. The access token used for the envrsk API
+#' authentication.
+#' @param positions Data Frame or List. The portfolio positions that should
+#' be decorated. This input should align with the envrsk API requirements for
+#' the `decorate-table-id` endpoint.
+#' @param simplify Logical. If TRUE, the function only returns the 'Output' field
+#' of the API response as a data.table. If FALSE, the function returns the
+#' entire response object. Default is TRUE.
+#' @return If the API call is successful (HTTP status code 200) and `simplify = TRUE`,
+#' a data.table from the 'Output' field of the API response is returned. If
+#' `simplify = FALSE`, the entire response object is returned. If the API call
+#' is not successful, the function returns the API response with an error message.
+#' @export
+#' @examples
+#' \dontrun{
+#' dt_positions <- as.data.frame(list("symbol"        = c("AAPL.US", "DANSKE.CO",
+#'                                                        "CashUSD", "AGG.US"),
+#'                                    "position_type" = c("single_stock",
+#'                                                        "single_stock", "cash", "etf"),
+#'                                    "quantity"      = c(129, 768, 69000, 89)))
+#'
+#' dt_positions <- envrsk_decorate_portfolio_with_uid(dt_positions)
+#' }
+envrsk_decorate_portfolio_with_uid <- function(access_token, positions, simplify = TRUE){
+  end_point <- "decorate-table-id"
+  api_url <- paste0(base_url, base_path, end_point)
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = access_token,
+                         params       = list(),
+                         body         = positions)
+  if(res_out[["status_code"]] == 200){
+    out <- res_out[["content"]]
+
+    if(!is.null(out[["Output"]])){
+      out[["Output"]] <- data.table::rbindlist(out[["Output"]], fill = TRUE)
+    }
+
+    if(simplify){
+      return(out[["Output"]])
+    } else {
+      return(out)
+    }
+  } else {
+    return(res_out)
+  }
+  return(out)
+}
