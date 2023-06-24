@@ -34,10 +34,3 @@ my_manifest$SIGNIF_LEVEL <- 0.975
 envrsk_update_manifest(my_manifest)
 }
 }
-\seealso{
-\itemize{
-  \item \link{envrsk_post}: Makes an HTTP POST request.
-  \item \link{get_api_url}: Get the API endpoint URL.
-  \item \link{get_access_token}: Get the access token for the API.
-}
-}

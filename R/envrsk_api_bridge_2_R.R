@@ -1767,13 +1767,6 @@ envrsk_get_manifest <- function(){
 #'   envrsk_update_manifest(manifest)
 #' }
 #'
-#' @seealso
-#' \itemize{
-#'   \item \link{envrsk_post}: Makes an HTTP POST request.
-#'   \item \link{get_api_url}: Get the API endpoint URL.
-#'   \item \link{get_access_token}: Get the access token for the API.
-#' }
-#'
 #' @export
 #' @examples
 #' \dontrun{
