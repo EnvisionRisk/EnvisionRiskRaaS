@@ -1887,7 +1887,7 @@ envrsk_decorate_portfolio_with_product_type <- function(positions, simplify = TR
 #' }
 envrsk_decorate_portfolio_with_uid <- function(access_token, positions, simplify = TRUE){
   end_point <- "decorate-table-id"
-  api_url <- paste0(base_url, base_path, end_point)
+  api_url <- get_api_url(end_point)
 
   res_out <- envrsk_post(url          = api_url,
                          access_token = access_token,
