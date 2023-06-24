@@ -1830,7 +1830,7 @@ envrsk_update_manifest <- function(manifest){
 #' }
 envrsk_decorate_portfolio_with_product_type <- function(positions, simplify = TRUE){
   end_point <- "decorate-position-id"
-  api_url <- get_api_url(end_point)
+  api_url   <- get_api_url(end_point)
 
   res_out <- envrsk_post(url          = api_url,
                          access_token = get_access_token(),
@@ -1885,12 +1885,12 @@ envrsk_decorate_portfolio_with_product_type <- function(positions, simplify = TR
 #'
 #' dt_positions <- envrsk_decorate_portfolio_with_uid(dt_positions)
 #' }
-envrsk_decorate_portfolio_with_uid <- function(access_token, positions, simplify = TRUE){
+envrsk_decorate_portfolio_with_uid <- function(positions, simplify = TRUE){
   end_point <- "decorate-table-id"
-  api_url <- get_api_url(end_point)
+  api_url   <- get_api_url(end_point)
 
   res_out <- envrsk_post(url          = api_url,
-                         access_token = access_token,
+                         access_token = get_access_token(),
                          params       = list(),
                          body         = positions)
   if(res_out[["status_code"]] == 200){
