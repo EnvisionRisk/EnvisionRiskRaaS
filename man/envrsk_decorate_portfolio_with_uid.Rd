@@ -4,12 +4,9 @@
 \alias{envrsk_decorate_portfolio_with_uid}
 \title{Decorates the portfolio with IDs using envrsk API}
 \usage{
-envrsk_decorate_portfolio_with_uid(access_token, positions, simplify = TRUE)
+envrsk_decorate_portfolio_with_uid(positions, simplify = TRUE)
 }
 \arguments{
-\item{access_token}{Character. The access token used for the envrsk API
-authentication.}
-
 \item{positions}{Data Frame or List. The portfolio positions that should
 be decorated. This input should align with the envrsk API requirements for
 the `decorate-table-id` endpoint.}

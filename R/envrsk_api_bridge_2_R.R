@@ -1862,8 +1862,6 @@ envrsk_decorate_portfolio_with_product_type <- function(positions, simplify = TR
 #' meta-data, additional risk factors or calculations based on the portfolio
 #' positions.
 #'
-#' @param access_token Character. The access token used for the envrsk API
-#' authentication.
 #' @param positions Data Frame or List. The portfolio positions that should
 #' be decorated. This input should align with the envrsk API requirements for
 #' the `decorate-table-id` endpoint.
