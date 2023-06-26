@@ -1838,7 +1838,7 @@ envrsk_manifest_restore_to_default <- function(){
   res_out <- envrsk_post(url          = api_url,
                          access_token = get_access_token(),
                          params       = .params,
-                         body         = list(manifest))
+                         body         = list())
 
   if(res_out[["status_code"]] == 200){
     message("OK - Manifest restored")
