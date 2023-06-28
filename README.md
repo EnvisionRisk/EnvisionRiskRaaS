@@ -49,6 +49,7 @@ You can install the development version of EnvisionRiskRaaS like so:
 
 ``` r
 # Install EnvisionRiskRaaS from Github
+require(devtools)
 devtools::install_github("EnvisionRisk/EnvisionRiskRaaS")
 ```
 
@@ -57,7 +58,7 @@ devtools::install_github("EnvisionRisk/EnvisionRiskRaaS")
 Although the following example may appear simple, it’s designed to
 illustrate how our service functions by requesting the simulated
 profit/loss (P/L) distribution for a single instrument — Apple (AAPL.US)
-as of 2023-06-23. Remember, this is just a starting point; our service
+as of 2023-06-28. Remember, this is just a starting point; our service
 also allows you to request simulated P/L distribution for your custom
 portfolios. Through this, you gain invaluable insights into potential
 future outcomes, enabling you to make informed investment decisions.

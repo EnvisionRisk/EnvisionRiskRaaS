@@ -37,6 +37,7 @@ You can install the development version of EnvisionRiskRaaS like so:
 
 ``` r
 # Install EnvisionRiskRaaS from Github
+require(devtools)
 devtools::install_github("EnvisionRisk/EnvisionRiskRaaS")
 ```
 ## Example
