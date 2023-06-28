@@ -40,8 +40,9 @@ EnvisionRisk employs robust authentication and authorization processes
 to safeguard systems and information. EnvisionRisk’s Market
 Risk-as-a-Service API operates on a token-based authentication system.
 To use the service you need to be a registered user. If you don’t
-already have credentials, you can sign up for a free trial account
-[here](https://envisionrisk.shinyapps.io/user_management).
+already have credentials, you can sign up for a free trial account here:
+
+[<img src="https://www.dropbox.com/s/c0aoi68xhmp1123/sign-up-button-png-33.png?raw=true" width="100"/>](https://envisionrisk.shinyapps.io/user_management).
 
 ## Installation
 
