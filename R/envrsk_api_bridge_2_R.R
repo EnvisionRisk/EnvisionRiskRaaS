@@ -1847,6 +1847,66 @@ envrsk_manifest_restore_to_default <- function(){
 }
 
 #******************************************************************************
+#### Workflow ####
+#******************************************************************************
+#' envrsk_workflow_backtest function
+#'
+#' This function conducts a backtest for VaR and ES predictions.
+#'
+#' @param backtestdata A dataset used for backtesting. This data is sent as body content in the API call.
+#' @param base_cur Optional. A character string specifying the base currency for the backtest. Default is NULL.
+#' @param signif_level Optional. A numeric value specifying the significance level for the backtest. Default is NULL.
+#'
+#' @return If the API call is successful (i.e., status code 200), the function returns a list containing 'Title',
+#' 'Input' (which includes 'backtestdata', 'base_cur', 'signif_level'), 'TechOpr', and 'Output'. If the API call fails,
+#' it returns the original output from the API call which includes the status code and error message.
+#'
+#' @examples
+#' \dontrun{
+#' # Download a test dataset with daily VaR and ES predictions and daily returns.
+#' dt_backtest_data <- readRDS(url("https://www.dropbox.com/s/owhjtmd2xlzft8s/backtestdata.rds?raw=true","rb"))
+#'
+#' # Process the backtest
+#' result_backtest <- envrsk_workflow_backtest(backtestdata = dt_backtest_data,
+#'                                             base_cur     = "DKK",
+#'                                             signif_level = 0.05)
+#' }
+#'
+#' @export
+
+envrsk_workflow_backtest <- function(backtestdata,
+                                     base_cur      = NULL,
+                                     signif_level  = NULL){
+
+  end_point <- "workflow-backtest"
+  api_url   <- get_api_url(end_point)
+
+  .params <- list("base_cur"      = base_cur,
+                  "signif_level"  = signif_level)
+  .params <- .params[lengths(.params) != 0]
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = get_access_token(),
+                         params       = .params,
+                         body         = backtestdata)
+
+  if(res_out[["status_code"]] == 200){
+    out_raw <- res_out[["content"]]
+
+    out <- list("Title"  = out_raw[["Title"]],
+                "Input"  = list("backtestdata" = data.table::rbindlist(out_raw[["Input"]][["BacktestData"]]),
+                                "base_cur"     = out_raw[["Input"]][["BaseCur"]],
+                                "signif_level" = out_raw[["Input"]][["SignifLevel"]]),
+                "TechOpr"  = out_raw[["TechOpr"]],
+                "Output"   = data.table::rbindlist(out_raw[["Output"]]))
+  } else {
+    return(res_out)
+  }
+
+  return(out)
+}
+
+#******************************************************************************
 #### Miscellaneous ####
 #******************************************************************************
 #' Decorate Portfolio with Product Type
