@@ -9,9 +9,9 @@ envrsk_workflow_backtest(backtestdata, base_cur = NULL, signif_level = NULL)
 \arguments{
 \item{backtestdata}{A dataset used for backtesting. This data is sent as body content in the API call.}
 
-\item{base_cur}{Optional. A character string specifying the base currency for the backtest. Default is NULL.}
+\item{base_cur}{Optional. A character string specifying the base currency used for VaR, ES and the returns. Default is NULL.}
 
-\item{signif_level}{Optional. A numeric value specifying the significance level for the backtest. Default is NULL.}
+\item{signif_level}{Optional. A numeric value specifying the significance level used for the calculation of VaR & ES. Default is NULL.}
 }
 \value{
 If the API call is successful (i.e., status code 200), the function returns a list containing 'Title',
@@ -24,12 +24,14 @@ This function conducts a backtest for VaR and ES predictions.
 \examples{
 \dontrun{
 # Download a test dataset with daily VaR and ES predictions and daily returns.
+# The VaR and ES prediction are based on a confidence level of 97,5\% with 1-day risk horizon.
+# VaR, ES and the returns are all dinominated in DKK.
 dt_backtest_data <- readRDS(url("https://www.dropbox.com/s/owhjtmd2xlzft8s/backtestdata.rds?raw=true","rb"))
 
 # Process the backtest
 result_backtest <- envrsk_workflow_backtest(backtestdata = dt_backtest_data,
                                             base_cur     = "DKK",
-                                            signif_level = 0.05)
+                                            signif_level = 0.975)
 }
 
 }
