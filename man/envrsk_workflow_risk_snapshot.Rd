@@ -11,6 +11,7 @@ envrsk_workflow_risk_snapshot(
   horizon = NULL,
   signif_level = NULL,
   volatility_id = NULL,
+  risk_measure = NULL,
   report_depth = NULL,
   simplify = FALSE
 )
@@ -27,6 +28,8 @@ envrsk_workflow_risk_snapshot(
 \item{signif_level}{The significance level for the risk calculations. Default is NULL.}
 
 \item{volatility_id}{The volatility id to use for the risk calculations. Default is NULL.}
+
+\item{risk_measure}{The risk_measure signify what risk measure to use in the report. Options are 'VaR' or 'ES'. Default is NULL ('ES' is the used).}
 
 \item{report_depth}{The depth of the report to be generated. Default is NULL.}
 

@@ -1945,6 +1945,7 @@ envrsk_workflow_backtest <- function(backtestdata,
 #' @param horizon       The horizon for the risk calculations. Default is NULL.
 #' @param signif_level  The significance level for the risk calculations. Default is NULL.
 #' @param volatility_id The volatility id to use for the risk calculations. Default is NULL.
+#' @param risk_measure  The risk_measure signify what risk measure to use in the report. Options are 'VaR' or 'ES'. Default is NULL ('ES' is the used).
 #' @param report_depth  The depth of the report to be generated. Default is NULL.
 #' @param simplify      Logical. If TRUE, the output is simplified. Default is FALSE.
 #'
@@ -1977,6 +1978,7 @@ envrsk_workflow_risk_snapshot <- function(date,
                                           horizon       = NULL,
                                           signif_level  = NULL,
                                           volatility_id = NULL,
+                                          risk_measure  = NULL,
                                           report_depth  = NULL,
                                           simplify      = FALSE){
   end_point <- "workflow-risk-snapshot"
@@ -1988,6 +1990,7 @@ envrsk_workflow_risk_snapshot <- function(date,
                   "horizon"       = horizon,
                   "signif_level"  = signif_level,
                   "volatility_id" = volatility_id,
+                  "risk_measure"  = risk_measure,
                   "report_depth"  = report_depth)
   .params <- .params[lengths(.params) != 0]
 
