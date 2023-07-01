@@ -911,6 +911,29 @@ envrsk_portfolio_hyp_rskadj_perf_component <- function(date,
   return(out)
 }
 
+envrsk_portfolio_hypothetical_performance <- function(date,
+                                            positions,
+                                            base_cur      = NULL,
+                                            report_depth  = NULL,
+                                            simplify      = FALSE){
+  end_point <- "portfolio-hyp-perf"
+  api_url <- get_api_url(end_point)
+
+  # Query parameters
+  .params <- list("date"          = date,
+                  "base_cur"      = base_cur,
+                  "report_depth"  = report_depth)
+  .params <- .params[lengths(.params) != 0]
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = get_access_token(),
+                         params       = .params,
+                         body         = positions)
+
+  out <- process_portfolio_return_values(res_out, simplify)
+  return(out)
+}
+
 #' Process API Response
 #'
 #' This function processes the response from the portfolio risk API.
@@ -1875,7 +1898,6 @@ envrsk_manifest_restore_to_default <- function(){
 #' }
 #'
 #' @export
-
 envrsk_workflow_backtest <- function(backtestdata,
                                      base_cur      = NULL,
                                      signif_level  = NULL){
@@ -1901,6 +1923,91 @@ envrsk_workflow_backtest <- function(backtestdata,
                                 "signif_level" = out_raw[["Input"]][["SignifLevel"]]),
                 "TechOpr"  = out_raw[["TechOpr"]],
                 "Output"   = data.table::rbindlist(out_raw[["Output"]]))
+  } else {
+    return(res_out)
+  }
+
+  return(out)
+}
+
+#' Run Workflow Risk Snapshot
+#'
+#' This function runs a workflow risk snapshot which calculates risk measures for a portfolio of positions.
+#' The function makes an API request to the specified endpoint and processes the returned data. It achieves
+#' this by making a post request to the specified endpoint with a variety of parameters that allow the user
+#' to customize the level of detail and perspective of the risk report. The function returns a list of various
+#' outputs, including the original input data, a technical operations report, portfolio positions, a
+#' portfolio delta vector, a portfolio risk report, and information on the mapping of positions.
+#'
+#' @param date          The date for which to run the risk snapshot.
+#' @param positions     The positions data.
+#' @param base_cur      The base currency to use for the risk calculations. Default is NULL.
+#' @param horizon       The horizon for the risk calculations. Default is NULL.
+#' @param signif_level  The significance level for the risk calculations. Default is NULL.
+#' @param volatility_id The volatility id to use for the risk calculations. Default is NULL.
+#' @param report_depth  The depth of the report to be generated. Default is NULL.
+#' @param simplify      Logical. If TRUE, the output is simplified. Default is FALSE.
+#'
+#' @return A list containing the inputs, technical operations, positions, portfolio delta vector,
+#'         portfolio risk, mapped positions, and unmapped positions.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' dt_positions <- as.data.frame(list("symbol"        = c("AAPL.US", "DANSKE.CO",
+#'                                                        "CashUSD", "AGG.US"),
+#'                                    "position_type" = c("single_stock",
+#'                                    "single_stock", "cash", "etf"),
+#'                                    "quantity"      = c(129, 768, 69000, 89)))
+#'
+#' response_risk_snapshot_1 <- envrsk_workflow_risk_snapshot(date      = Sys.Date(),
+#'                                                         positions = dt_positions)
+#'
+#' response_risk_snapshot_2 <- envrsk_workflow_risk_snapshot(date      = Sys.Date(),
+#'                                                    positions    = dt_positions,
+#'                                                    base_cur     = "USD",
+#'                                                    horizon      = 10,
+#'                                                    signif_level = 0.99,
+#'                                                    volatility_id = "downturn",
+#'                                                    simplify = TRUE)
+#' }
+envrsk_workflow_risk_snapshot <- function(date,
+                                          positions,
+                                          base_cur      = NULL,
+                                          horizon       = NULL,
+                                          signif_level  = NULL,
+                                          volatility_id = NULL,
+                                          report_depth  = NULL,
+                                          simplify      = FALSE){
+  end_point <- "workflow-risk-snapshot"
+  api_url <- get_api_url(end_point)
+
+  # Query parameters
+  .params <- list("date"          = date,
+                  "base_cur"      = base_cur,
+                  "horizon"       = horizon,
+                  "signif_level"  = signif_level,
+                  "volatility_id" = volatility_id,
+                  "report_depth"  = report_depth)
+  .params <- .params[lengths(.params) != 0]
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = get_access_token(),
+                         params       = .params,
+                         body         = positions)
+
+  if(res_out[["status_code"]] == 200){
+    out_raw <- res_out[["content"]]
+
+    out <- list(
+      "Input"                  = out_raw[["Input"]],
+      "tech_opr"               = out_raw[["tech_opr"]],
+      "positions"              = data.table::rbindlist(out_raw[["positions"]]),
+      "portfolio_delta_vector" = data.table::rbindlist(out_raw[["portfolio_delta_vector"]]),
+      "portfolio_risk"         = data.table::rbindlist(out_raw[["portfolio_risk"]]),
+      "positions_mapped"       = data.table::rbindlist(out_raw[["Positions_Mapped"]], fill = TRUE),
+      "positions_unmapped"     = data.table::rbindlist(out_raw[["Positions_UnMapped"]], fill = TRUE)
+    )
   } else {
     return(res_out)
   }
