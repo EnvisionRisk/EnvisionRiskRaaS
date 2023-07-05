@@ -911,6 +911,37 @@ envrsk_portfolio_hyp_rskadj_perf_component <- function(date,
   return(out)
 }
 
+#' envrsk_portfolio_hypothetical_performance function
+#'
+#' This function calculates the hypothetical performance of a portfolio over a given time period. It sends a request to an external API endpoint
+#' and processes the return values.
+#'
+#' @param date A character string representing the date for the performance calculation.
+#' @param positions A dataset representing the portfolio positions.
+#' @param base_cur Optional. A character string representing the base currency for the calculation. Default is NULL.
+#' @param report_depth Optional. A numeric value representing the depth of the report. Default is NULL.
+#' @param simplify Optional. A logical value. If TRUE, the result is simplified to a vector or matrix if possible. Default is FALSE.
+#'
+#' @return This function returns processed portfolio return values based on the response from the API call.
+#'
+#' @examples
+#' \dontrun{
+#' dt_positions <- as.data.frame(list("symbol"        = c("AAPL.US", "DANSKE.CO",
+#' "CashUSD", "AGG.US"),
+#'                                    "position_type" = c("single_stock",
+#'                                    "single_stock", "cash", "etf"),
+#'                                    "quantity"      = c(129, 768, 69000, 89)))
+#'
+#' port_hyp_perf_1 <- envrsk_portfolio_hypothetical_performance(date         = Sys.Date(),
+#'                                                              positions    = dt_positions)
+#'
+#' port_hyp_perf_2 <- envrsk_portfolio_hypothetical_performance(date          = "2023-06-30",
+#'                                                              positions     = dt_positions,
+#'                                                              base_cur      = "USD",
+#'                                                              report_depth  = 0,
+#'                                                              simplify      = TRUE)
+#'}
+#' @export
 envrsk_portfolio_hypothetical_performance <- function(date,
                                             positions,
                                             base_cur      = NULL,
