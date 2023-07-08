@@ -2049,6 +2049,72 @@ envrsk_workflow_risk_snapshot <- function(date,
   return(out)
 }
 
+#' envrsk_workflow_weight_2_quantities function
+#'
+#' This function calculates quantities based on weights in a portfolio, it communicates with an external API and
+#' processes the received data. It enables you to convert portfolio weights to quantities for each instrument.
+#'
+#' @param dt_snapshot_weight A data table that contains portfolio weights at a certain date.
+#' @param init_port_market_value A numeric value that represents the initial market value of the portfolio.
+#' @param base_cur A character string that specifies the base currency for the calculation.
+#' @param is_wide Optional. A logical value that indicates whether the input data table is in 'wide' format. Default is FALSE.
+#' @param to_date Optional. A character string or Date object representing the ending date for the calculation. Default is the current date.
+#'
+#' @return If the API call is successful (i.e., status code 200), a list containing 'Title', 'Input' (which includes
+#' 'PortfolioWeights', 'base_cur', 'signif_level'), 'TechOpr', 'Output' (which includes 'PortfolioEvents' and 'PortfolioQuantites'),
+#' and 'UnMappedSymbols'. If the API call fails, it returns the original output from the API call which includes the status code and error message.
+#'
+#' @examples
+#' \dontrun{
+#' # Download a test dataset with positions weights in a wide format.
+#' dt_snapshot_weight <- readRDS(url("https://www.dropbox.com/scl/fi/6864xzl4fdw7hw7wu5m8t/portfolio_weights_wide.rds?rlkey=ra44iz6ruwmte4zyi8itkpoww&raw=true","rb"))
+#'
+#' # Process the weights into daily position-quantities
+#' result_weights_2_quantities <- envrsk_workflow_weight_2_quantities(
+#'   dt_snapshot_weight     = dt_snapshot_weight,
+#'   init_port_market_value = 1000000,
+#'   base_cur               = "DKK",
+#'   is_wide                = TRUE)
+#' }
+#' @export
+envrsk_workflow_weight_2_quantities <- function(dt_snapshot_weight,
+                                                init_port_market_value, base_cur,
+                                                is_wide = FALSE, to_date = NULL){
+  if(is.null(to_date)){
+    to_date <- Sys.Date()
+  }
+
+  end_point <- "workflow-weight-2-quantities"
+  api_url   <- get_api_url(end_point)
+
+  .params <- list("init_port_market_value" = init_port_market_value,
+                  "is_wide"                = is_wide,
+                  "base_cur"               = base_cur,
+                  "to_date"                = to_date)
+  .params <- .params[lengths(.params) != 0]
+
+  res_out <- envrsk_post(url          = api_url,
+                         access_token = get_access_token(),
+                         params       = .params,
+                         body         = dt_snapshot_weight)
+
+  if(res_out[["status_code"]] == 200){
+    out_raw <- res_out[["content"]]
+
+    out <- list("Title"  = out_raw[["Title"]],
+                "Input"  = list("PortfolioWeights" = data.table::rbindlist(out_raw$Input$PortfolioWeights),
+                                "base_cur"         = out_raw[["Input"]][["BaseCur"]],
+                                "signif_level"     = out_raw[["Input"]][["SignifLevel"]]),
+                "TechOpr"  = out_raw[["TechOpr"]],
+                "Output"  = list("PortfolioEvents"    = data.table::rbindlist(out_raw$Output$Events, fill = TRUE),
+                                 "PortfolioQuantites" = data.table::rbindlist(out_raw$Output$Positions)),
+                "UnMappedSymbols" = data.table::rbindlist(out_raw$Output$UnmappedSymbols, fill = TRUE))
+  } else {
+    return(res_out)
+  }
+  return(out)
+}
+
 #******************************************************************************
 #### Miscellaneous ####
 #******************************************************************************
