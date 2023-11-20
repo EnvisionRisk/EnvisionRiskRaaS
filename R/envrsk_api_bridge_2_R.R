@@ -50,12 +50,10 @@
 #*    ultimately driving performance and profitability.
 #*
 #******************************************************************************
-.onLoad <- function(libname, pkgname){
-  options(digits = 12)
-  options(scipen=999)
-  .datatable.aware = TRUE
-  Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
-}
+# options(digits = 12)
+# options(scipen = 999)
+# .datatable.aware = TRUE
+# Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
 
 #******************************************************************************
 #*
@@ -69,6 +67,11 @@
 #* from the API into R data structures.
 #*
 .onLoad = function (libname, pkgname) {
+  options(digits = 12)
+  options(scipen = 999)
+  .datatable.aware = TRUE
+  Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
+
   assign('api_url', 'https://api.envisionrisk.com/', envir = topenv())
   assign('api_path', 'v1/themis/', envir = topenv())
 }
