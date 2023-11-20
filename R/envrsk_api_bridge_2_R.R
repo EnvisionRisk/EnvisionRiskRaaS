@@ -50,9 +50,12 @@
 #*    ultimately driving performance and profitability.
 #*
 #******************************************************************************
-Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
-.datatable.aware = TRUE
-options(scipen=999)
+.onLoad <- function(libname, pkgname){
+  options(digits = 12)
+  options(scipen=999)
+  .datatable.aware = TRUE
+  Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
+}
 
 #******************************************************************************
 #*
@@ -1127,7 +1130,7 @@ envrsk_instrument_performance <- function(symbols,
   return(out)
 }
 
-#' Instrument Performance
+#' Instrument Performance Raw
 #'
 #' This function calls the 'instrument-performance-raw' endpoint of the EnvisionRisk API
 #' to retrieve performance data for a set of financial instruments. The endpoint does not
@@ -1253,7 +1256,7 @@ envrsk_instrument_value_at_risk <- function(date,
   return(out)
 }
 
-#' Instrument Value at Risk
+#' Instrument Value at Risk Raw
 #'
 #' This function calls the 'instrument-value-at-risk-raw' endpoint of the EnvisionRisk API
 #' to compute the Value at Risk (VaR) for a set of financial instruments.
@@ -1381,7 +1384,7 @@ envrsk_instrument_expected_shortfall <- function(date,
   return(out)
 }
 
-#' Instrument Expected Shortfall
+#' Instrument Expected Shortfall Raw
 #'
 #' This function calls the 'instrument-expected-shortfall-raw' endpoint of the
 #' EnvisionRisk API
@@ -1568,6 +1571,7 @@ envrsk_instrument_delta_vector_raw <- function(date,
   }
   return(out)
 }
+
 #******************************************************************************
 #### Time Series ####
 #******************************************************************************
@@ -1621,7 +1625,7 @@ envrsk_market_price <- function(symbols,
   return(out)
 }
 
-#' Market Price
+#' Market Price Raw
 #'
 #' This function calls the 'market-price-raw' endpoint of the EnvisionRisk API
 #' to obtain the market prices for a set of financial instruments. The prices are
@@ -1830,6 +1834,12 @@ envrsk_get_manifest <- function(){
 #'
 #' envrsk_update_manifest(my_manifest)
 #' }
+my_manifest              <- envrsk_get_manifest()
+my_manifest$BASE_CUR     <- "DKK"
+my_manifest$SIGNIF_LEVEL <- 0.975
+#undebug(envrsk_update_manifest)
+envrsk_update_manifest(my_manifest)
+
 envrsk_update_manifest <- function(manifest){
   end_point <- "put-manifest"
   api_url   <- get_api_url(end_point)
@@ -2102,12 +2112,12 @@ envrsk_workflow_weight_2_quantities <- function(dt_snapshot_weight,
     out_raw <- res_out[["content"]]
 
     out <- list("Title"  = out_raw[["Title"]],
-                "Input"  = list("PortfolioWeights" = data.table::rbindlist(out_raw$Input$PortfolioWeights),
+                "Input"  = list("PortfolioWeights" = data.table::rbindlist(out_raw$Input$PortfolioWeights, fill = TRUE),
                                 "base_cur"         = out_raw[["Input"]][["BaseCur"]],
                                 "signif_level"     = out_raw[["Input"]][["SignifLevel"]]),
                 "TechOpr"  = out_raw[["TechOpr"]],
                 "Output"  = list("PortfolioEvents"    = data.table::rbindlist(out_raw$Output$Events, fill = TRUE),
-                                 "PortfolioQuantites" = data.table::rbindlist(out_raw$Output$Positions)),
+                                 "PortfolioQuantites" = data.table::rbindlist(out_raw$Output$Positions, fill = TRUE)),
                 "UnMappedSymbols" = data.table::rbindlist(out_raw$Output$UnmappedSymbols, fill = TRUE))
   } else {
     return(res_out)
