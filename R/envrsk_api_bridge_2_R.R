@@ -50,15 +50,16 @@
 #*    ultimately driving performance and profitability.
 #*
 #******************************************************************************
-.onLoad = function(libname, pkgname){
-  Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
-  .datatable.aware = TRUE
-  options(scipen=999)
-  options(digits=12)
+Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
+.datatable.aware = TRUE
+options(scipen=999)
+options(digits=12)
 
-  #assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
-  #assign('envrsk_api_path', 'v1/themis/', envir = topenv())
-}
+# .onLoad = function(libname, pkgname){
+#
+#   #assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
+#   #assign('envrsk_api_path', 'v1/themis/', envir = topenv())
+# }
 
 
 #******************************************************************************
