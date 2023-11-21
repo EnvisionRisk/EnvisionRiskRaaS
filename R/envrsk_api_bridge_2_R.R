@@ -50,14 +50,14 @@
 #*    ultimately driving performance and profitability.
 #*
 #******************************************************************************
-.onLoad = function(libname, pkgname) {
+.onLoad = function(libname, pkgname){
   Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
   .datatable.aware = TRUE
   options(scipen=999)
   options(digits=12)
 
-  assign('api_url', 'https://api.envisionrisk.com/', envir = topenv())
-  assign('api_path', 'v1/themis/', envir = topenv())
+  #assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
+  #assign('envrsk_api_path', 'v1/themis/', envir = topenv())
 }
 
 
@@ -73,8 +73,10 @@
 #* from the API into R data structures.
 #*
 get_api_url <- function(end_point){
-  api_url <- paste0(api_url,
-                    api_path,
+  assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
+  assign('envrsk_api_path', 'v1/themis/', envir = topenv())
+  api_url <- paste0(envrsk_api_url,
+                    envrsk_api_path,
                     end_point)
   return(api_url)
 }
