@@ -72,11 +72,13 @@
   .datatable.aware = TRUE
   Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
 
-  assign('api_url', 'https://api.envisionrisk.com/', envir = topenv())
-  assign('api_path', 'v1/themis/', envir = topenv())
+  #assign('api_url', 'https://api.envisionrisk.com/', envir = topenv())
+  #assign('api_path', 'v1/themis/', envir = topenv())
 }
 
 get_api_url <- function(end_point){
+  api_url  <- 'https://api.envisionrisk.com/'
+  api_path <-  'v1/themis/'
   api_url <- paste0(api_url,
                     api_path,
                     end_point)
