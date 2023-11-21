@@ -50,10 +50,15 @@
 #*    ultimately driving performance and profitability.
 #*
 #******************************************************************************
-Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
-.datatable.aware = TRUE
-options(scipen=999)
-options(digits=12)
+.onLoad = function(libname, pkgname) {
+  Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
+  .datatable.aware = TRUE
+  options(scipen=999)
+  options(digits=12)
+
+  assign('api_url', 'https://api.envisionrisk.com/', envir = topenv())
+  assign('api_path', 'v1/themis/', envir = topenv())
+}
 
 
 #******************************************************************************
@@ -67,14 +72,6 @@ options(digits=12)
 #* care of communicating with the cloud server and transform the JSON output
 #* from the API into R data structures.
 #*
-# api_url  <- 'https://api.envisionrisk.com/'
-# api_path <- 'v1/themis/'
-# usethis::use_data(api_url, api_path, internal = TRUE)
-# .onLoad = function (libname, pkgname) {
-#   assign('api_url', 'https://api.envisionrisk.com/', envir = topenv())
-#   assign('api_path', 'v1/themis/', envir = topenv())
-# }
-
 get_api_url <- function(end_point){
   api_url <- paste0(api_url,
                     api_path,
