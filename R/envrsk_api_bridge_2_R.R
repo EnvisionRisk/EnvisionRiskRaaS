@@ -55,11 +55,10 @@ Sys.setenv('_R_CHECK_SYSTEM_CLOCK_' = 0)
 options(scipen=999)
 options(digits=12)
 
-# .onLoad = function(libname, pkgname){
-#
-#   #assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
-#   #assign('envrsk_api_path', 'v1/themis/', envir = topenv())
-# }
+.onLoad = function(libname, pkgname){
+  assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
+  assign('envrsk_api_path', 'v1/themis/', envir = topenv())
+}
 
 
 #******************************************************************************
@@ -74,8 +73,8 @@ options(digits=12)
 #* from the API into R data structures.
 #*
 get_api_url <- function(end_point){
-  assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
-  assign('envrsk_api_path', 'v1/themis/', envir = topenv())
+  #assign('envrsk_api_url', 'https://api.envisionrisk.com/', envir = topenv())
+  #assign('envrsk_api_path', 'v1/themis/', envir = topenv())
   api_url <- paste0(envrsk_api_url,
                     envrsk_api_path,
                     end_point)
@@ -1836,12 +1835,6 @@ envrsk_get_manifest <- function(){
 #'
 #' envrsk_update_manifest(my_manifest)
 #' }
-my_manifest              <- envrsk_get_manifest()
-my_manifest$BASE_CUR     <- "DKK"
-my_manifest$SIGNIF_LEVEL <- 0.975
-#undebug(envrsk_update_manifest)
-envrsk_update_manifest(my_manifest)
-
 envrsk_update_manifest <- function(manifest){
   end_point <- "put-manifest"
   api_url   <- get_api_url(end_point)
