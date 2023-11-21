@@ -2109,12 +2109,12 @@ envrsk_workflow_weight_2_quantities <- function(dt_snapshot_weight,
     out_raw <- res_out[["content"]]
 
     out <- list("Title"  = out_raw[["Title"]],
-                "Input"  = list("PortfolioWeights" = data.table::rbindlist(out_raw$Input$PortfolioWeights),
+                "Input"  = list("PortfolioWeights" = data.table::rbindlist(out_raw$Input$PortfolioWeights, fill = TRUE),
                                 "base_cur"         = out_raw[["Input"]][["BaseCur"]],
                                 "signif_level"     = out_raw[["Input"]][["SignifLevel"]]),
                 "TechOpr"  = out_raw[["TechOpr"]],
                 "Output"  = list("PortfolioEvents"    = data.table::rbindlist(out_raw$Output$Events, fill = TRUE),
-                                 "PortfolioQuantites" = data.table::rbindlist(out_raw$Output$Positions)),
+                                 "PortfolioQuantites" = data.table::rbindlist(out_raw$Output$Positions, fill = TRUE)),
                 "UnMappedSymbols" = data.table::rbindlist(out_raw$Output$UnmappedSymbols, fill = TRUE))
   } else {
     return(res_out)
