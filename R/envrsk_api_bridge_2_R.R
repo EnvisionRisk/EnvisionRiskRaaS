@@ -116,7 +116,7 @@ envrsk_post <- function(access_token,
   .headers <- httr::add_headers('ACCESS-TOKEN' = access_token)
 
   # Body
-  .body <- jsonlite::toJSON(body)
+  .body <- jsonlite::toJSON(body, digits = 12)
 
   #' post call to the endpoint
   res <- httr::POST(
