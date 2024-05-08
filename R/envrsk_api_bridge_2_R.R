@@ -1,7 +1,7 @@
 #roxygen2::roxygenise()
 #******************************************************************************
 #*
-#* EnvisionRisk Market Risk-as-a-Service API - R-Interface, May 2023
+#* EnvisionRisk Market Risk-as-a-Service API - R-Interface, May 2024
 #*
 #******************************************************************************
 #* EnvisionRisk Market Risk-as-a-Service API is a cloud-based technology solution
@@ -94,7 +94,7 @@ get_access_token <- function(){
 #'
 #' This function sets the access token and its expiry as environment variables after
 #' authenticating a user with the provided user ID and password. The function retrieves
-#' an access token using `envrsk_auth_get_access_token` and checks the status of the
+#' an access token and checks the status of the
 #' retrieval. If successful, the access token and expiry are set as environment variables.
 #' If not successful, it returns an error message with the status code.
 #'
@@ -106,11 +106,12 @@ get_access_token <- function(){
 #' If the authentication fails, it returns a status code of 400 along with the error message.
 #'
 #' @examples
-#' set_access_token_non_interactively("your_username", "your_password")
+#' \dontrun{
+#' envrsk_auth_set_access_token_non_interactively("your_username", "your_password")
+#' }
 #'
-#' @importFrom Sys setenv
 #' @export
-set_access_token_non_interactively <- function(usr_id, usr_pwd){
+envrsk_auth_set_access_token_non_interactively <- function(usr_id, usr_pwd){
   obj_access_token <- envrsk_auth_get_access_token(usr_id, usr_pwd)
   if(obj_access_token[["status-code"]] == 200){
     Sys.setenv("ACCESS_TOKEN"        = access_token[["access-token"]],
