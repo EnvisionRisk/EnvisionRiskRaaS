@@ -2,7 +2,7 @@
 % Please edit documentation in R/envrsk_api_bridge_2_R.R
 \name{envrsk_market_price_raw}
 \alias{envrsk_market_price_raw}
-\title{Market Price}
+\title{Market Price Raw}
 \usage{
 envrsk_market_price_raw(symbols)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/envrsk_api_bridge_2_R.R
 \name{envrsk_instrument_expected_shortfall_raw}
 \alias{envrsk_instrument_expected_shortfall_raw}
-\title{Instrument Expected Shortfall}
+\title{Instrument Expected Shortfall Raw}
 \usage{
 envrsk_instrument_expected_shortfall_raw(
   date,

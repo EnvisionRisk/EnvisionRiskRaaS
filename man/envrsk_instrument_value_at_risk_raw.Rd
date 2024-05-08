@@ -2,7 +2,7 @@
 % Please edit documentation in R/envrsk_api_bridge_2_R.R
 \name{envrsk_instrument_value_at_risk_raw}
 \alias{envrsk_instrument_value_at_risk_raw}
-\title{Instrument Value at Risk}
+\title{Instrument Value at Risk Raw}
 \usage{
 envrsk_instrument_value_at_risk_raw(
   date,

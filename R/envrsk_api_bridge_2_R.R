@@ -90,6 +90,42 @@ get_access_token <- function(){
   stop(auth_flow_response)
 }
 
+#' Set Access Token Non-Interactively
+#'
+#' This function sets the access token and its expiry as environment variables after
+#' authenticating a user with the provided user ID and password. The function retrieves
+#' an access token using `envrsk_auth_get_access_token` and checks the status of the
+#' retrieval. If successful, the access token and expiry are set as environment variables.
+#' If not successful, it returns an error message with the status code.
+#'
+#' @param usr_id The user ID for authentication.
+#' @param usr_pwd The password for authentication.
+#'
+#' @return A list containing the status code and a message. If the authentication is successful,
+#' the list will have a status code of 200 and a message indicating the token has been acquired.
+#' If the authentication fails, it returns a status code of 400 along with the error message.
+#'
+#' @examples
+#' set_access_token_non_interactively("your_username", "your_password")
+#'
+#' @importFrom Sys setenv
+#' @export
+set_access_token_non_interactively <- function(usr_id, usr_pwd){
+  obj_access_token <- envrsk_auth_get_access_token(usr_id, usr_pwd)
+  if(obj_access_token[["status-code"]] == 200){
+    Sys.setenv("ACCESS_TOKEN"        = access_token[["access-token"]],
+               "ACCESS_TOKEN_EXPIRY" = as.character(as.POSIXct(
+                 access_token[["access-token-expiry"]],
+                 format = "%Y-%m-%d %h:%m:%s")))
+    #message("access-token has been aquired")
+    return(list("status-code" = 200,
+                "message" = "access-token has been aquired"))
+  } else {
+    return(list("status-code" = 400,
+                "message" = access_token))
+  }
+}
+
 #' Function to make a POST request to an API
 #'
 #' This function sends a POST request to the specified API URL.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/envrsk_api_bridge_2_R.R
 \name{envrsk_instrument_performance_raw}
 \alias{envrsk_instrument_performance_raw}
-\title{Instrument Performance}
+\title{Instrument Performance Raw}
 \usage{
 envrsk_instrument_performance_raw(
   symbols,
